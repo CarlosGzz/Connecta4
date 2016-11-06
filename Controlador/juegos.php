@@ -1,17 +1,16 @@
 <?php
 	require "Modelo/connect.php";
-	$data = $db->query("SELECT * FROM user");
-	$users = array();
+	$juegos = $db->query("SELECT * FROM juego");
+	$juegos = array();
 	while($object = mysqli_fetch_object($data)){
-		$users[]=$object;
+		$juegos[]=$object;
 	}
 	$string = "";
-	foreach ($users as $user) {
+	foreach ($juegos as $juego) {
 		$string .= "<p>";
-		$string .= $user->ipAddress;
+		$string .= $juego->user1;
 		$string .= "/";
-		$string .= $user->diaHora;
-		$string .= "";
+		$string .= $juego->user2;
 		$string .= "</p>";
 	}
 	echo $string;

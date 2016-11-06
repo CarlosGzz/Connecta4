@@ -1,16 +1,47 @@
 <?php
-	echo $_SERVER['REMOTE_ADDR'];
-	$ipAddress = $_SERVER['REMOTE_ADDR'];
-	$timestamp = date("Y-m-d h:i:sa");
-	echo $timestamp;
+	session_start();
 
-	include ("Modelo/connect.php");
-	$sql = "INSERT INTO user (ipAddress,diaHora)
-			VALUES ('$ipAddress','$timestamp')";
-	if ($db->query($sql) === TRUE) {
-		echo "1";
-	} else {
-		echo "error". $sql . "<br>" . $db->error;
+	if(empty($_SESSION['token'])){
+		$_SESSION['token'] = 'user'.md5(uniqid(rand(), true));
+		$token = $_SESSION['token'];
+		$timestamp = date("Y-m-d h:i:sa");
+		include ("Modelo/connect.php");
+		$sql = "INSERT INTO user (ipAddress,diaHora)
+				VALUES ('$token','$timestamp')";
+		if ($db->query($sql) === TRUE) {
+			echo 'Nuevo Usuario creado';
+		} else {
+			echo "error". $sql . "<br>" . $db->error;
+		}
+		$data = $db->query("SELECT * FROM juego WHERE user2 = null");
+		$juegos = array();
+		while($object = mysqli_fetch_object($data)){
+			$juegos[]=$object;
+		}
+		var_dump(mysql_num_rows($juegos));
+		if(mysql_num_rows($juegos) == 0){
+			$sql = "INSERT INTO juego (user1,turno,gameOver,ganador,tablero)
+					VALUES ('$token','1','0','0','')";
+			if ($db->query($sql) === TRUE) {
+				echo "Nuevo Juego Creado";
+			} else {
+				echo "error". $sql . "<br>" . $db->error;
+			}
+		}else{
+			foreach ($juegos as $juego) {
+				$idJuego = $juego->idjuego;
+				$sql = "UPDATE juego (user2)
+						SET ('$token')
+						WHERE 'idjuego' = '$idJuego'";
+				if ($db->query($sql) === TRUE) {
+					echo "unido exitosamente a juego";
+				} else {
+					echo "error". $sql . "<br>" . $db->error;
+				}
+			}
+		}
+
+	}else{
 	}
 ?>
 
@@ -21,6 +52,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="icon" href="Vista/IMG/gamepad.png">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
@@ -74,7 +106,7 @@
         <li class="active"><a href="#">Home</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> <?php echo $_SESSION['token'];?></a></li>
       </ul>
     </div>
   </div>
@@ -87,20 +119,12 @@
       	<?php require "Controlador/conectados.php";?>
     </div>
     <div class="col-sm-8 text-left">
-      <h1>Welcome</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <hr>
-      <h3>Test</h3>
-      <p>Lorem ipsum...</p>
     </div>
     <div class="col-sm-2 sidenav">
-      <div class="well">
-        <p>ADS</p>
-      </div>
-      <div class="well">
-        <p>ADS</p>
-      </div>
+    	<label> Juegos Corrientes</label>
+      	<?php require "Controlador/juegos.php";?>
     </div>
+
   </div>
 </div>
 
