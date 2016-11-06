@@ -1,7 +1,7 @@
 <?php
 	echo $_SERVER['REMOTE_ADDR'];
 	$ipAddress = $_SERVER['REMOTE_ADDR'];
-	$timestamp = date("Y-m-d h:i:sa", $d);
+	$timestamp =date("Y-m-d h:i:sa");
 	echo $timestamp;
 /*
 	include ("Modelo/connect.php");
