@@ -1,5 +1,5 @@
 <?php
-	require "Modelo/connect.php";
+	require "../Modelo/connect.php";
 	$data = $db->query("SELECT * FROM user");
 	$users = array();
 	while($object = mysqli_fetch_object($data)){
@@ -14,6 +14,6 @@
 		$string .= "";
 		$string .= "</p>";
 	}
-	echo $string;
-	//echo count($users);
+	//echo $string;
+	echo json_encode($users);
 ?>
