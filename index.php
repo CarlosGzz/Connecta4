@@ -6,7 +6,7 @@
 		$token = $_SESSION['token'];
 		$timestamp = date("Y-m-d h:i:sa");
 		include ("Modelo/connect.php");
-		$sql = "INSERT INTO user (ipAddress,diaHora)
+		$sql = "INSERT INTO user (token,diaHora)
 				VALUES ('$token','$timestamp')";
 		if ($db->query($sql) === TRUE) {
 			echo 'Nuevo Usuario creado';
@@ -18,8 +18,7 @@
 		while($object = mysqli_fetch_object($data)){
 			$juegos[]=$object;
 		}
-		var_dump(mysql_num_rows($juegos));
-		if(mysql_num_rows($juegos) == 0){
+		if(mysqli_num_rows($data) == 0){
 			$sql = "INSERT INTO juego (user1,turno,gameOver,ganador,tablero)
 					VALUES ('$token','1','0','0','')";
 			if ($db->query($sql) === TRUE) {
@@ -41,7 +40,6 @@
 			}
 		}
 
-	}else{
 	}
 ?>
 

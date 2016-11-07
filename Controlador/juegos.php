@@ -1,6 +1,6 @@
 <?php
 	require "Modelo/connect.php";
-	$juegos = $db->query("SELECT * FROM juego");
+	$data = $db->query("SELECT * FROM juego");
 	$juegos = array();
 	while($object = mysqli_fetch_object($data)){
 		$juegos[]=$object;

@@ -8,7 +8,7 @@
 	$string = "";
 	foreach ($users as $user) {
 		$string .= "<p>";
-		$string .= $user->ipAddress;
+		$string .= $user->token;
 		$string .= "/";
 		$string .= $user->diaHora;
 		$string .= "";
