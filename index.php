@@ -1,7 +1,7 @@
 <?php
 	session_start();
 
-	if(empty($_SESSION['token'])){
+	if(empty($_SESSION['tokens'])){
 		$_SESSION['token'] = 'user'.md5(uniqid(rand(), true));
 		$token = $_SESSION['token'];
 		$timestamp = date("Y-m-d h:i:sa");
@@ -13,11 +13,12 @@
 		} else {
 			echo "error". $sql . "<br>" . $db->error;
 		}
-		$data = $db->query("SELECT * FROM juego WHERE user2 = null");
+		$data = $db->query("SELECT * FROM juego WHERE user2 IS NULL");
 		$juegos = array();
 		while($object = mysqli_fetch_object($data)){
 			$juegos[]=$object;
 		}
+		var_dump($juegos);
 		if(mysqli_num_rows($data) == 0){
 			$sql = "INSERT INTO juego (user1,turno,gameOver,ganador,tablero)
 					VALUES ('$token','1','0','0','')";
@@ -29,9 +30,9 @@
 		}else{
 			foreach ($juegos as $juego) {
 				$idJuego = $juego->idjuego;
-				$sql = "UPDATE juego (user2)
-						SET ('$token')
-						WHERE 'idjuego' = '$idJuego'";
+				$sql = "UPDATE juego
+						SET user2 = '$token'
+						WHERE idjuego = '$idJuego' ";
 				if ($db->query($sql) === TRUE) {
 					echo "unido exitosamente a juego";
 				} else {
