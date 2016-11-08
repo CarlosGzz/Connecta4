@@ -1,3 +1,6 @@
+<?php
+   if (session_status() == PHP_SESSION_NONE) {
+?>
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -58,7 +61,28 @@
             <div class="panel-heading">
                <h2 class="form-signin-heading panel-title">Login</h2>
             </div>
-            <form class="form-signin" action="Vista/index.php" method="POST">
+            <?php
+               if(isset($_GET['error'])){
+                  $error = '<div id="error" class="alert alert-danger">';
+                  if($_GET['error']==0){
+                     $error .= 'Error: No se ha iniciado sesión </div>';
+                  }
+                  if($_GET['error']==1){
+                     $error .= 'Error: Nombre vacio </div>';
+                  }
+                  if($_GET['error']==2){
+                     $error .= 'Error: No se permiten caracteres especiales </div>';
+                  }
+                  if($_GET['error']==3){
+                     $error .= 'Error: al crear el usuario </div>';
+                  }
+                  if($_GET['error']==4){
+                     $error .= 'Error: al crear el juego del usuario </div>';
+                  }
+                  echo $error;
+               }
+            ?>
+            <form class="form-signin" action="Controlador/iniciarSession.php" method="POST">
                <div class="panel-body">
                   <label for="inputEmail" class="sr-only">Nombre De Usuario</label>
                   <input type="text" name="nombreUser" id="nombreUser" class="form-control" placeholder="Nombre de Usuario" required autofocus>
@@ -76,3 +100,8 @@
    </footer>
   </body>
 </html>
+<?php
+   }else{
+      header('Location: Vista/index.php');
+   }
+?>

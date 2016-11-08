@@ -1,51 +1,11 @@
 <?php
-	session_start();
-   if (isset($_POST)) {
-  	   if(empty($_SESSION['token'])){
-         require "../Modelo/connect.php";
-         $_SESSION['nombreUser'] = $_POST['nombreUser'];
-         $_SESSION['token'] = 'user'.md5(uniqid(rand(), true));
-
-         $nombreUser = $_SESSION['nombreUser'];
-         $token = $_SESSION['token'];
-         $timestamp = date("Y-m-d h:i:sa");
-
-         $sql = "INSERT INTO user (nombreUser,token,diaHora)
-                  VALUES ('$nombreUser','$token','$timestamp')";
-  		   if ($db->query($sql) === TRUE) {
-            echo 'Nuevo Usuario creado';
-  		   } else {
-  			   echo "error". $sql . "<br>" . $db->error;
-         }
-
-         $data = $db->query("SELECT * FROM juego WHERE user2 IS NULL");
-         $juegos = array();
-         while($object = mysqli_fetch_object($data)){
-            $juegos[]=$object;
-         }
-
-         if(mysqli_num_rows($data) == 0){
-     			$sql = "INSERT INTO juego (user1,turno,gameOver,ganador,tablero)
-     					VALUES ('$token','1','0','0','')";
-     			if ($db->query($sql) === TRUE) {
-     				echo "Nuevo Juego Creado";
-     			} else {
-     				echo "error". $sql . "<br>" . $db->error;
-     			}
-     		}else{
-     			foreach ($juegos as $juego) {
-     				$idJuego = $juego->idjuego;
-     				$sql = "UPDATE juego
-     						SET user2 = '$token'
-     						WHERE idjuego = '$idJuego' ";
-     				if ($db->query($sql) === TRUE) {
-     					echo "unido exitosamente a juego";
-     				} else {
-     					echo "error". $sql . "<br>" . $db->error;
-     				}
-     			}
-     		}
-      }
+   if (isset($_POST['nombreUser'])) {
+      header('Location: ../index.php?error=0');
+   }else{
+      session_start();
+      if(empty($_SESSION['token'])){
+         header('Location: ../index.php?error=0');
+      }else{
 ?>
 
 <!DOCTYPE html>
@@ -66,7 +26,9 @@
        }
        
        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-       .row.content {height: 450px}
+       .row.content {
+         height: 600px;
+      }
        
        /* Set gray background color and 100% height */
        .sidenav {
@@ -90,8 +52,9 @@
          }
          .row.content {height:auto;}
        }
-       .container-fluid{
-         height: auto;
+       .content{
+         height: 100%;
+         overflow: auto;
        }
      </style>
    </head>
@@ -108,32 +71,28 @@
          <a class="navbar-brand" href="#">Conecta 4</a>
        </div>
        <div class="collapse navbar-collapse" id="myNavbar">
-         <ul class="nav navbar-nav">
-           <li class="active"><a href="#">Home</a></li>
-         </ul>
          <ul class="nav navbar-nav navbar-right">
-           <li><a href="../Controlador/terminarSession.php"><span class="glyphicon glyphicon-log-in"></span> <?php echo $_SESSION['nombreUser'];?></a></li>
+           <li><a href="../Controlador/terminarSession.php" ><span class="glyphicon glyphicon-log-in"></span> <?php echo $_SESSION['nombreUser'];?> logout</a></li>
          </ul>
        </div>
      </div>
    </nav>
-     
-   <div class="container-fluid text-center">
-     <div class="row content">
-       <div class="col-sm-2 sidenav">
-       	<label> Usuarios Conectados</label>
-         <div id="conectados"></div>
-       </div>
-       <div class="col-sm-8 text-left">
-       </div>
-       <div class="col-sm-2 sidenav">
-       	<label> Juegos Corrientes</label>
-            <div id="juegos"></div>
-       </div>
-
-     </div>
+   <div class="content">
+      <div class="container-fluid text-center">
+         <div class="row content">
+            <div class="col-sm-2 sidenav">
+               <label> Usuarios Conectados</label>
+               <div id="conectados"></div>
+            </div>
+            <div class="col-sm-8 text-left">
+            </div>
+            <div class="col-sm-2 sidenav">
+               <label> Juegos Corrientes</label>
+               <div id="juegos"></div>
+            </div>
+         </div>
+      </div>
    </div>
-
    <footer class="container-fluid text-center">
      <p>Made with love and code by Carlos, Luis & Juan</p>
    </footer>
@@ -141,8 +100,7 @@
 
    </body>
 </html>
-<?php 
-   }else{
-      header('Location: ../');
+<?php
+      }
    }
 ?>
