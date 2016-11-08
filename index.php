@@ -79,6 +79,9 @@
                   if($_GET['error']==4){
                      $error .= 'Error: al crear el juego del usuario </div>';
                   }
+                  if($_GET['error']==5){
+                     $error .= 'Error: el nombre de usuario ya existe </div>';
+                  }
                   echo $error;
                }
             ?>
@@ -86,6 +89,7 @@
                <div class="panel-body">
                   <label for="inputEmail" class="sr-only">Nombre De Usuario</label>
                   <input type="text" name="nombreUser" id="nombreUser" class="form-control" placeholder="Nombre de Usuario" required autofocus>
+                  <p class="help-block" id="help"></p>
                </div>
                <div class="panel-footer">
                   <button class="btn btn-lg btn-block" type="submit">Sign in</button>
@@ -94,10 +98,31 @@
          </div>
       </div>
 
-   </div> <!-- /container -->
-   <footer class="container-fluid text-center">
+    </div> <!-- /container -->
+    <footer class="container-fluid text-center">
       <p>Made with love and code by Carlos, Luis & Juan</p>
-   </footer>
+    </footer>
+    <script type="text/javascript">
+    var userName = setInterval(userName, 1000);
+    var igual = 0;
+
+    function userName() {
+      var nombreUser = $("#nombreUser").val();
+        $.ajax({
+            url: 'Controlador/userName.php',
+            method: 'POST',
+            data: {nombreUser:nombreUser},
+            success: function(msg){
+                if(msg == 1){
+                  $('#help').html("El nombre de usuario ya esta ocupado")
+                }else{
+                  $('#help').empty()
+                }
+            }
+        });
+    }
+    </script>
+
   </body>
 </html>
 <?php

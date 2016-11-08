@@ -4,6 +4,11 @@
 	$password = "d32eb0ea";
 	$dbname = "heroku_1f1d4a73d7ba315";
 
+	/*$servername = "localhost";
+	$username = "root";
+	$password = "kobyjzt";
+	$dbname = "conecta4";*/
+
 	// Create connection
 	$db = new mysqli($servername, $username, $password, $dbname);
 	// Check connection

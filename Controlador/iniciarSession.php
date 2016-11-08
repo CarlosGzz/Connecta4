@@ -1,17 +1,23 @@
 <?php
    if (isset($_POST['nombreUser'])) {
       if(empty($_SESSION['token'])){
+         require "../Modelo/connect.php";
          if(trim($_POST['nombreUser'])==''){
             header('Location: ../index.php?error=1');
          }else{
             if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', trim($_POST['nombreUser']))){
                header('Location: ../index.php?error=2');
             }else{
-               $nombreUser = $_POST['nombreUser'];
+               $result =$db->query('SELECT * FROM user WHERE nombreUser = $_POST["nombreUser"]');
+               if ($result>0){
+                  header('Location: ../index.php?error=5');
+               }
+               else{
+                  $nombreUser = $_POST['nombreUser'];
+               }
             }
          }
          session_start();
-         require "../Modelo/connect.php";
          $_SESSION['nombreUser'] = $nombreUser;
          $_SESSION['token'] = 'user'.md5(uniqid(rand(), true));
          $token = $_SESSION['token'];
