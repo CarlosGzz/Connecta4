@@ -14,7 +14,8 @@ function cambiosEnUsuarios() {
         method: 'POST',
         success: function(users){
             var usersArray = jQuery.parseJSON(users);
-            if(usuarios < usersArray.length){
+            if(usuarios == usersArray.length){
+            }else{
                 $('#conectados').empty();
                 $.each(usersArray,function(key,val){
                     $('#conectados').append("<p>"+(key+1)+".- "+val.nombreUser+"</p>")
@@ -38,18 +39,16 @@ function cambioEnjuegos() {
         method: 'POST',
         success: function(games){
             var juegosArray = jQuery.parseJSON(games);
-            if(juegos < juegosArray.length){
-                $('#juegos').empty();
-                $.each(juegosArray,function(key,val){
-                    if(val.user2 == null){
-                        $('#juegos').append("<p>"+(key+1)+".- "+val.user1+" | esperando..</p>")
-                    }else{
-                        $('#juegos').append("<p>"+(key+1)+".- "+val.user1+" | "+val.user2+"</p>")
-                    }
-                    
-                })
-                juegos = juegosArray.length;
-            }
+            $('#juegos').empty();
+            $.each(juegosArray,function(key,val){
+                if(val.user2 == null){
+                    $('#juegos').append("<p>"+(key+1)+".- "+val.user1+" | esperando..</p>")
+                }else{
+                    $('#juegos').append("<p>"+(key+1)+".- "+val.user1+" | "+val.user2+"</p>")
+                }
+                
+            })
+                
         }
     });
 }
