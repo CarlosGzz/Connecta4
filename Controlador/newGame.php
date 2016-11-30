@@ -1,4 +1,5 @@
 <?php
+	header("Access-Control-Allow-Origin: *");
     require "../Modelo/connect.php";
     session_start();
     $json = array('token'=>'','player'=>0,'error'=>['status'=>false,'msg'=>array()]);
