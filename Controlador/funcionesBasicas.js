@@ -10,15 +10,15 @@ var usuarios = 0;
 
 function cambiosEnUsuarios() {
     $.ajax({
-        url: '../Controlador/conectados.php',
+        url: 'Controlador/conectados.php',
         method: 'POST',
         success: function(users){
-            var usersArray = jQuery.parseJSON(users);
+            var usersArray = JSON.parse(users);
             if(usuarios == usersArray.length){
             }else{
                 $('#conectados').empty();
                 $.each(usersArray,function(key,val){
-                    $('#conectados').append("<p>"+(key+1)+".- "+val.nombreUser+"</p>")
+                    $('#conectados').append("<p>"+(key+1)+".- User"+val.iduser+"</p>")
                 })
                 usuarios = usersArray.length;
                 cambioEnjuegos;
@@ -35,16 +35,16 @@ var juegos = 0;
 
 function cambioEnjuegos() {
     $.ajax({
-        url: '../Controlador/juegos.php',
+        url: 'Controlador/juegos.php',
         method: 'POST',
         success: function(games){
             var juegosArray = jQuery.parseJSON(games);
             $('#juegos').empty();
             $.each(juegosArray,function(key,val){
                 if(val.user2 == null){
-                    $('#juegos').append("<p>"+(key+1)+".- "+val.user1+" | esperando..</p>")
+                    $('#juegos').append("<p>"+(key+1)+".- User"+val.user1+" | esperando..</p>")
                 }else{
-                    $('#juegos').append("<p>"+(key+1)+".- "+val.user1+" | "+val.user2+"</p>")
+                    $('#juegos').append("<p>"+(key+1)+".- User"+val.user1+" | User"+val.user2+"</p>")
                 }
                 
             })

@@ -50,10 +50,10 @@
 
     if($error = ''){
         //echo "deberia haber salido bien ";
-    	header('Location: ../Vista/index.php');
+    	header('Location: ..');
     }else{
         //echo $error;
-        header('Location: ../Vista/index.php?error=$error');
+        header('Location: ..');
     }
 
     function borrarJuegoPorUser($id,$user,$success,$error){

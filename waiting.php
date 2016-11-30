@@ -1,13 +1,3 @@
-<?php
-   if (isset($_POST['nombreUser'])) {
-      header('Location: ../index.php?error=0');
-   }else{
-      session_start();
-      if(empty($_SESSION['token'])){
-         header('Location: ../index.php?error=0');
-      }else{
-?>
-
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -57,6 +47,38 @@
          overflow: auto;
        }
      </style>
+     <style>
+
+      /*NO QUITAR, ESTILO PARA AGRANDAR RADIOBUTTON*/
+      input[type='radio'] {
+        -webkit-appearance:none;
+        width:4em;
+        height:4em;
+        border:1px solid darkgray;
+        border-radius:50%;
+        outline:none;
+        box-shadow:0 0 5px 0px gray inset;
+      }
+
+
+      input[type='radio']:hover {
+        box-shadow:0 0 5px 0px orange inset;
+      }
+
+      input[type='radio']:before {
+        content:'';
+        display:block;
+        width:60%;
+        height:60%;
+        margin: 20% auto;    
+        border-radius:50%;    
+      }
+
+      /* Aqui se modifica el color  */
+      input[type='radio']:checked:before {
+
+      }
+   </style>
    </head>
    <body>
 
@@ -72,7 +94,7 @@
        </div>
        <div class="collapse navbar-collapse" id="myNavbar">
          <ul class="nav navbar-nav navbar-right">
-           <li><a href="../Controlador/terminarSession.php" ><span class="glyphicon glyphicon-log-in"></span> <?php echo $_SESSION['nombreUser'];?> logout</a></li>
+           <li><a href="Controlador/terminarSession.php" ><span class="glyphicon glyphicon-log-in"></span>logout</a></li>
          </ul>
        </div>
      </div>
@@ -84,7 +106,11 @@
                <label> Usuarios Conectados</label>
                <div id="conectados"></div>
             </div>
-            <div class="col-sm-8 text-left">
+            <div class="col-sm-8">
+              <div>
+                  <h1>Contecta 4</h1>
+                  <a href="index.php"> Unirse a un juego</button>
+              </div>
             </div>
             <div class="col-sm-2 sidenav">
                <label> Juegos Corrientes</label>
@@ -96,11 +122,7 @@
    <footer class="container-fluid text-center">
      <p>Made with love and code by Carlos, Luis & Juan</p>
    </footer>
-   <script type="text/javascript" src="../Controlador/funcionesBasicas.js"></script>
+   <script type="text/javascript" src="Controlador/funcionesBasicas.js"></script>
 
    </body>
 </html>
-<?php
-      }
-   }
-?>
